@@ -1,5 +1,47 @@
 body {
-    font-family: "JetBrains Mono", "Roboto";
-    color: #eeeeee;
-    background-color: #0f0f0f;
+  margin: 0;
+  font-family: "JetBrains Mono";
+  color: #eeeeee;
+  background-color: #0f0f0f;
+}
+
+.page {
+  max-width: 700px;
+  margin: 48px auto;
+  padding: 0 16px;
+}
+
+.profile-card {
+  border-radius: 25px;
+  border: 2px solid #b39eb5;
+  background-color: #1e1e2e;
+  padding: 28px;
+}
+
+.profile-header {
+  border-bottom: 2px solid #eeeeee;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.meta {
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  color: #c3b1e1;
+}
+
+.profile-content h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.profile-content p {
+  margin: 0;
+  line-height: 1.6;
+  color: #dddddd;
 }
