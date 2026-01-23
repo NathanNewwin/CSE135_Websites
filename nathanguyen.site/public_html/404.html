@@ -13,7 +13,70 @@
       rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="404.css">
+    <style>
+      body {
+        margin: 0;
+        font-family: "JetBrains Mono";
+        color: #eeeeee;
+        background-color: #0f0f0f;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+      }
+
+      .card {
+        width: min(720px, 100%);
+        border-radius: 25px;
+        border: 2px solid #b39eb5;
+        background-color: #1e1e2e;
+        padding: 28px;
+      }
+
+      .header {
+        border-bottom: 2px solid #eeeeee;
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+      }
+
+      .tag {
+        margin: 0 0 10px;
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid #b39eb5;
+        color: #c3b1e1;
+        background: rgba(179, 158, 181, 0.08);
+        font-size: 0.9rem;
+      }
+
+      .title {
+        margin: 0;
+        font-size: 3rem;
+        line-height: 1.1;
+        letter-spacing: 1px;
+      }
+
+      .subtitle {
+        margin: 6px 0 0;
+        color: #c3b1e1;
+      }
+
+      .message {
+        margin: 0 0 18px;
+        line-height: 1.6;
+        color: #dddddd;
+      }
+
+      .hint {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #bbbbbb;
+      }
+    </style>
   </head>
 
   <body>
