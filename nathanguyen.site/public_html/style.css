@@ -1,0 +1,96 @@
+body {
+    font-family: "JetBrains Mono", "Roboto";
+    color: #eeeeee;
+    background-color: #0f0f0f;
+}
+
+.page {
+    max-width: 900px;
+    margin: 24px auto;
+    padding: 0 16px;
+
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 32px;
+    align-items: start;
+}
+
+.course-header {
+    border-radius: 25px;
+    border: 2px solid #B39EB5;
+    padding: 20px;
+    background-color: #1e1e2e;
+}
+
+.course-title,
+.course-subtitle {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.course-subtitle {
+    font-size: medium;
+}
+
+.card {
+    margin: 18px 0;
+    border-radius: 10px;
+    border: 2px solid #B39EB5;
+    padding: 20px;
+}
+
+.card h2 {
+    margin: 0;
+    padding: 6px 0;
+}
+
+.card-header {
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eeeeee;
+}
+
+.hw1 {
+    background-color: #373754;
+}
+
+.inactive {
+    background-color: #212121;
+}
+
+.card-links,
+.members {
+    margin: 8px 0 0;
+    padding-left: 18px;
+}
+
+.tbd {
+    margin-top: 8px;
+}
+
+.sidebar {
+    border-radius: 25px;
+    border: 2px solid #B39EB5;
+    padding: 20px;
+    background-color: #1e1e2e;
+}
+
+.sidebar h3 {
+    margin: 0 0 8px;
+}
+
+a {
+    color: #8ab4f8;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #c3b1e1;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    color: #a5c7ff;
+}
