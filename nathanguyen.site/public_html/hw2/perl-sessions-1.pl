@@ -23,6 +23,7 @@ print "</head>";
 print "<body>";
 
 print "<h1>Perl Sessions Page 1</h1>";
+print "<p><b>Session ID:</b> " . $session->id . "</p>";
 
 if ($name){
 	print("<p><b>Name:</b> $name");
@@ -32,7 +33,7 @@ if ($name){
 print "<br/><br/>";
 print "<a href=\"/hw2/perl-sessions-2.pl\">Session Page 2</a><br/>";
 print "<a href=\"/hw2/perl-cgiform.html\">Perl CGI Form</a><br />";
-print "<form style=\"margin-top:30px\" action=\"/hw/perl-destroy-session.pl\" method=\"get\">";
+print "<form style=\"margin-top:30px\" action=\"/hw2/perl-destroy-session.pl\" method=\"get\">";
 print "<button type=\"submit\">Destroy Session</button>";
 print "</form>";
 

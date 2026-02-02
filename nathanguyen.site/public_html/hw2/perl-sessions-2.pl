@@ -26,6 +26,7 @@ print "</head>";
 print "<body>";
 
 print "<h1>Perl Sessions Page 2</h1>";
+print "<p><b>Session ID:</b> " . $session->id . "</p>";
 
 if ($name){
 	print("<p><b>Name:</b> $name");
