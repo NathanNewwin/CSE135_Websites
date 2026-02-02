@@ -35,9 +35,9 @@ if ($name){
 	print "<p><b>Name:</b> You do not have a name set</p>";
 }
 print "<br/><br/>";
-print "<a href=\"/hw2/perl-sessions-1.pl\">Session Page 1</a><br/>";
-print "<a href=\"/hw2/perl-cgiform.html\">Perl CGI Form</a><br />";
-print "<form style=\"margin-top:30px\" action=\"/hw2/perl-destroy-session.pl\" method=\"get\">";
+print "<a href=\"/hw2/perl/perl-sessions-1.pl\">Session Page 1</a><br/>";
+print "<a href=\"/hw2/perl/perl-cgiform.html\">Perl CGI Form</a><br />";
+print "<form style=\"margin-top:30px\" action=\"/hw2/perl/perl-destroy-session.pl\" method=\"get\">";
 print "<button type=\"submit\">Destroy Session</button>";
 print "</form>";
 
