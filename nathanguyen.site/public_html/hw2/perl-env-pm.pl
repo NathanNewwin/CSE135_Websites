@@ -8,7 +8,10 @@ print "Cache-Control: no-cache\n";
 print header;
 
 # CGI.pm Method
-print start_html("Environment Variables");
+print start_html(
+  -title => 'Environment Variables',
+  -style => { -src => '/style.css' }
+);
 
 print "<h1 align='center'>Environment Variables</h1><hr />";
 
