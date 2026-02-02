@@ -117,3 +117,53 @@ a:hover {
 a:active {
   color: #a5c7ff;
 }
+
+.hw2-shell {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 18px;
+  margin-top: 12px;
+}
+
+.hw2-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hw2-tab {
+  font: inherit;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.15);
+  color: inherit;
+  cursor: pointer;
+}
+
+.hw2-tab.is-active {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.45);
+}
+
+.hw2-panel {
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.10);
+  padding: 14px 16px;
+}
+
+.hw2-title {
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.20);
+}
+
+.hw2-pane {
+  display: none;
+}
+
+.hw2-pane.is-open {
+  display: block;
+}
