@@ -80,6 +80,26 @@ body {
   margin: 0 0 8px;
 }
 
+.hw2-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 12px;
+}
+
+.hw2-col h3 {
+  margin: 0 0 8px;
+}
+
+.hw2-col-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  text-align: center;
+}
+
 a {
   color: #8ab4f8;
   text-decoration: none;
