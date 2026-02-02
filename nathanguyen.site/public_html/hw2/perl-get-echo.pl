@@ -5,7 +5,7 @@ print "Content-type: text/html \n\n";
 # print HTML file top
 print <<END;
 <!DOCTYPE html>
-<html><head><title>GET Request Echo</title>
+<html><head><title>GET Request Echo</title><link rel="stylesheet" href="style.css">
 </head><body><h1 align="center">Get Request Echo</h1>
 <hr>
 END

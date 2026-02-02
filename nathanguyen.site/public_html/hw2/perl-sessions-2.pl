@@ -22,6 +22,7 @@ print "Content-Type: text/html\n\n";
 print "<html>";
 print "<head>";
 print "<title>Perl Sessions</title>";
+print "<link rel=\"stylesheet\" href=\"\\style.css\">";
 print "</head>";
 print "<body>";
 

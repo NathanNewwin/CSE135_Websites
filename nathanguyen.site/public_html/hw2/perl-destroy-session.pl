@@ -16,6 +16,7 @@ $session->delete();
 print "<html>";
 print "<head>";
 print "<title>Perl Session Destroyed</title>";
+print "<link rel=\"stylesheet\" href=\"\\style.css\">";
 print "</head>";
 print "<body>";
 print "<h1 align=center>Session Destroyed</h1>";
