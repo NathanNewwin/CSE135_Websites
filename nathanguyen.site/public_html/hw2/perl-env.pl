@@ -5,7 +5,7 @@ print "Content-type: text/html \n\n";
 # print HTML file top
 print <<END;
 <!DOCTYPE html>
-<html><head><title>Environment Variables</title><link rel="stylesheet" href="style.css">
+<html><head><title>Environment Variables</title><link rel="stylesheet" href="/style.css">
 </head><body><h1 align="center">Environment Variables</h1>
 <hr>
 END
