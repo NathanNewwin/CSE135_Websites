@@ -7,7 +7,7 @@ print "<!DOCTYPE html>";
 print "<html>";
 print "<head>";
 print "<title>Hello CGI World</title>";
-print "<link rel=\"stylesheet\" href=\"\\style.css\">"
+print "<link rel=\"stylesheet\" href=\"\\style.css\">";
 print "</head>";
 print "<body>";
 
