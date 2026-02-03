@@ -1,12 +1,31 @@
 use std::env;
-use std::fs;
+use std::fs::{self, File};
+use std::io::Read;
 use std::path::PathBuf;
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
-#[derive(Serialize, Deserialize)]
-struct SessionData {
-    username: String,
+fn generate_session_id() -> String {
+    let mut f = File::open("/dev/urandom").unwrap();
+    let mut buf = [0u8; 16];
+    f.read_exact(&mut buf).unwrap();
+    let mut s = String::new();
+    for byte in buf.iter() { s.push_str(&format!("{:02x}", byte)); }
+    s
+}
+
+fn parse_username_from_json(json: &str) -> String {
+    let key = "\"username\"";
+    if let Some(idx) = json.find(key) {
+        let remainder = &json[idx + key.len()..];
+        if let Some(colon) = remainder.find(':') {
+            let val_part = &remainder[colon + 1..].trim();
+            if val_part.starts_with('"') {
+                if let Some(end_quote) = val_part[1..].find('"') {
+                    return val_part[1..=end_quote].to_string();
+                }
+            }
+        }
+    }
+    "No name set".to_string()
 }
 
 fn main() {
@@ -24,20 +43,15 @@ fn main() {
             }
         }
     }
-
-    if sid.is_empty() {
-        sid = Uuid::new_v4().to_string();
-    }
+    if sid.is_empty() { sid = generate_session_id(); }
 
     let session_filename = format!("sess_{}.json", sid);
     let session_path = temp_dir.join(session_filename);
-    
-    let mut data = SessionData { username: "No name set".to_string() };
+    let mut username = "No name set".to_string();
+
     if session_path.exists() {
         if let Ok(content) = fs::read_to_string(&session_path) {
-            if let Ok(json_data) = serde_json::from_str::<SessionData>(&content) {
-                data = json_data;
-            }
+            username = parse_username_from_json(&content);
         }
     }
 
@@ -66,14 +80,14 @@ fn main() {
     <div class="card">
         <h2>Actions</h2>
         <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="state-1-rust" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 1</a>
+            <a href="state-1-rust.cgi" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 1</a>
             <a href="session-form-rust.html" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Form</a>
-            <form action="state-destroy-rust" method="POST" style="margin: 0;">
+            <form action="state-destroy-rust.cgi" method="POST" style="margin: 0;">
                 <button type="submit" class="hw2-tab" style="background-color: #543737; border-color: #b59e9e;">Destroy Session</button>
             </form>
         </div>
     </div>
 </div>
 </body>
-</html>"#, data.username, sid);
+</html>"#, username, sid);
 }

@@ -22,7 +22,6 @@ fn main() {
     if !sid.is_empty() {
         let session_filename = format!("sess_{}.json", sid);
         let session_path = temp_dir.join(session_filename);
-
         if session_path.exists() {
             if fs::remove_file(session_path).is_ok() {
                 message = "Session file deleted successfully.";
@@ -56,8 +55,8 @@ fn main() {
         
         <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
                 <a href="session-form-rust.html" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Form</a>
-                <a href="state-1-rust" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 1</a>
-                <a href="state-2-rust" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 2</a>
+                <a href="state-1-rust.cgi" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 1</a>
+                <a href="state-2-rust.cgi" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 2</a>
         </div>
     </div>
 </div>
