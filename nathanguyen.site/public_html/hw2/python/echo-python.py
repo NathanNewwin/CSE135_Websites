@@ -1,78 +1,31 @@
-#!/usr/bin/python3
-import os, sys, json, time, urllib.parse
+from flask import Flask, request, jsonify
+from datetime import datetime
+import os
 
-def read_body():
-    try:
-        length = int(os.environ.get("CONTENT_LENGTH", "0"))
-    except ValueError:
-        length = 0
-    return sys.stdin.read(length) if length > 0 else ""
+app = Flask(__name__)
 
-def parse_urlencoded(s):
-    qs = urllib.parse.parse_qs(s, keep_blank_values=True)
-    return {k: (v[0] if len(v) == 1 else v) for k, v in qs.items()}
+@app.route('/echo', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def echo_response():
+    # Gather request metadata
+    response_data = {
+        "hostname": request.host,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "user_agent": request.headers.get('User-Agent'),
+        "ip_address": request.remote_addr,
+        "method": request.method,
+        "payload": {}
+    }
 
-server_protocol = os.environ.get("SERVER_PROTOCOL", "")
-method = os.environ.get("REQUEST_METHOD", "").upper()
-hostname = os.environ.get("SERVER_NAME", "")
-ip = os.environ.get("REMOTE_ADDR", "")
-user_agent = os.environ.get("HTTP_USER_AGENT", "")
-timestamp = time.ctime()
-
-raw_query = os.environ.get("QUERY_STRING", "")
-parsed_query = parse_urlencoded(raw_query) if raw_query else {}
-
-content_type = (os.environ.get("CONTENT_TYPE") or "").split(";")[0].strip().lower()
-raw_body = read_body()
-
-parsed_body = None
-body_error = None
-
-if raw_body:
-    if content_type == "application/json":
-        try:
-            parsed_body = json.loads(raw_body)
-        except Exception as e:
-            body_error = f"Invalid JSON: {e}"
-            parsed_body = raw_body
-    elif content_type == "application/x-www-form-urlencoded":
-        parsed_body = parse_urlencoded(raw_body)
+    # Handle data based on Content-Type
+    if request.method == 'GET':
+        response_data["payload"] = request.args.to_dict()
     else:
-        parsed_body = raw_body
+        if request.is_json:
+            response_data["payload"] = request.get_json()
+        else:
+            response_data["payload"] = request.form.to_dict()
 
-print("Cache-Control: no-cache")
-print("Content-Type: text/html")
-print()
+    return jsonify(response_data)
 
-print(f"""<!doctype html>
-<html>
-<head>
-  <title>Python Echo</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-<h1>Python Echo</h1>
-<hr>
-
-<p><b>Server Protocol:</b> {server_protocol}</p>
-<p><b>HTTP Method:</b> {method}</p>
-<p><b>Hostname:</b> {hostname}</p>
-<p><b>Time:</b> {timestamp}</p>
-<p><b>User Agent:</b> {user_agent}</p>
-<p><b>Client IP Address:</b> {ip}</p>
-<p><b>Content-Type:</b> {content_type if content_type else "(none)"}</p>
-
-<br>
-
-<p><b>Raw Query:</b></p>
-<pre>{raw_query if raw_query else "(none)"}</pre>
-
-<p><b>Parsed Query:</b></p>
-<pre>{json.dumps(parsed_query, indent=2) if parsed_query else "(none)"}</pre>
-
-<p><b>Raw Message Body:</b></p>
-<pre>{raw_body if raw_body else "(none)"}</pre>
-
-<p><b>Parsed Message Body:</b></p>
-<pre>{json.dumps(parsed_body, indent=2) if parsed_body is not None else "(none)"}</pre>
-</body></html>""")
+if __name__ == '__main__':
+    app.run(port=5000)

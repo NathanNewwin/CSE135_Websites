@@ -1,262 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <title>Echo Form</title>
-    <link rel="stylesheet" href="/style.css" />
-    <style>
-        .echo-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 14px;
-        }
-
-        .echo-row {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .echo-row input {
-            width: 100%;
-        }
-
-        .echo-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .echo-out {
-            white-space: pre-wrap;
-            overflow: auto;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            background: rgba(0, 0, 0, 0.12);
-            min-height: 120px;
-        }
-
-        .echo-status {
-            margin-top: 12px;
-            opacity: 0.9;
-        }
-
-        input,
-        select,
-        textarea,
-        button {
-            font: inherit;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            background: rgba(0, 0, 0, 0.10);
-            color: inherit;
-        }
-
-        button {
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.08);
-            color: inherit;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        code {
-            opacity: 0.9;
-        }
-
-        select {
-            color: #e9dcff;
-            background-color: #2f2f46;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            padding: 10px 12px;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Echo Language Form</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="page">
-        <main>
-            <section class="card active">
-                <h2 class="card-header">Echo Form</h2>
 
-                <p class="tbd">
-                    Choose a language, HTTP method, and encoding. The endpoint will echo back what it received plus
-                    hostname, time, user-agent, and IP.
-                </p>
+    <h2>Echo Endpoint Tester</h2>
+    
+    <noscript>
+        <p class="noscript-msg">JavaScript is disabled. The form will default to POST /echo with URL encoding.</p>
+    </noscript>
 
-                <!-- No-JS fallback: normal GET urlencoded to python -->
-                <noscript>
-                    <div class="card inactive" style="margin-top:12px;">
-                        <div class="card-header">
-                            <h2>No-JS Mode</h2>
-                        </div>
-                        <p>JavaScript is off. This fallback submits a basic GET request (x-www-form-urlencoded) to
-                            Python.</p>
-                        <form method="get" action="/hw2/python/echo-python.py">
-                            <div class="echo-grid">
-                                <div class="echo-row">
-                                    <label>name</label>
-                                    <input name="name" />
-                                </div>
-                                <div class="echo-row">
-                                    <label>message</label>
-                                    <input name="message" />
-                                </div>
-                            </div>
-                            <div class="echo-actions" style="margin-top:12px;">
-                                <button type="submit">Send GET (Python)</button>
-                            </div>
-                        </form>
-                    </div>
-                </noscript>
+    <form id="echoForm" action="/echo" method="POST">
+        <div class="form-group">
+            <label for="language">Target Language (Endpoint):</label>
+            <select id="language" name="language">
+                <option value="/echo-python">Python (/echo)</option>
+                <option value="/echo-nodejs">NodeJS (Demo only)</option>
+            </select>
+        </div>
 
-                <!-- JS-enhanced form -->
-                <form id="echoForm" action="/hw2/python/echo-python.py" method="post" style="margin-top:12px;">
-                    <div class="echo-grid">
-                        <div class="echo-row">
-                            <label for="lang">Language</label>
-                            <select id="lang" name="lang">
-                                <option value="/hw2/python/echo-python.py" selected>Python</option>
-                                <option value="/hw2/perl/perl-general-echo.pl">Perl (general echo)</option>
-                                <option value="/hw2/node/node-general-echo.cgi">NodeJs (general echo)</option>
-                                <option value="/hw2/rust/rust-general-echo.cgi">Rust (general echo)</option>
-                            </select>
-                        </div>
+        <div class="form-group">
+            <label for="httpMethod">HTTP Method:</label>
+            <select id="httpMethod" name="httpMethod">
+                <option value="GET">GET</option>
+                <option value="POST" selected>POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+        </div>
 
-                        <div class="echo-row">
-                            <label for="method">HTTP Method</label>
-                            <select id="method" name="method">
-                                <option value="GET">GET</option>
-                                <option value="POST" selected>POST</option>
-                                <option value="PUT">PUT</option>
-                                <option value="DELETE">DELETE</option>
-                            </select>
-                        </div>
+        <div class="form-group">
+            <label for="encoding">Encoding:</label>
+            <select id="encoding" name="encoding">
+                <option value="application/x-www-form-urlencoded">x-www-form-urlencoded</option>
+                <option value="application/json">application/json</option>
+            </select>
+        </div>
 
-                        <div class="echo-row">
-                            <label for="encoding">Encoding</label>
-                            <select id="encoding" name="encoding">
-                                <option value="application/x-www-form-urlencoded" selected>x-www-form-urlencoded
-                                </option>
-                                <option value="application/json">application/json</option>
-                            </select>
-                        </div>
+        <div class="form-group">
+            <label for="message">Data Field (Message):</label>
+            <input type="text" id="message" name="message" value="Hello World">
+        </div>
 
-                        <div class="echo-row">
-                            <label for="endpoint">Endpoint (auto)</label>
-                            <input id="endpoint" name="endpoint" type="text" value="/hw2/python/echo-python.py"
-                                readonly />
-                        </div>
+        <button type="submit">Submit Request</button>
+    </form>
 
-                        <div class="echo-row">
-                            <label for="name">name</label>
-                            <input id="name" name="name" placeholder="e.g. Nathan" />
-                        </div>
-
-                        <div class="echo-row">
-                            <label for="message">message</label>
-                            <input id="message" name="message" placeholder="e.g. hello from the form" />
-                        </div>
-
-                        <div class="echo-row" style="grid-column: 1 / -1;">
-                            <label for="extra">extra (optional)</label>
-                            <textarea id="extra" name="extra" rows="3" placeholder="Any additional text..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="echo-actions" style="margin-top:12px;">
-                        <button type="submit">Send</button>
-                    </div>
-                    
-                    <div id="status" class="echo-status" aria-live="polite"></div>
-                </form>
-
-                <p style="margin-top:10px;">
-                    <a href="/">Back</a>
-                </p>
-            </section>
-        </main>
-    </div>
+    <h3>Response:</h3>
+    <pre id="responseOutput">Submit the form to see the echo response...</pre>
 
     <script>
-        (function () {
-            const form = document.getElementById("echoForm");
-            const status = document.getElementById("status");
-            const lang = document.getElementById("lang");
-            const method = document.getElementById("method");
-            const encoding = document.getElementById("encoding");
-            const endpoint = document.getElementById("endpoint");
+        document.getElementById('echoForm').addEventListener('submit', function(e) {
+            // Prevent default form submission to handle via JS
+            e.preventDefault();
 
-            function syncEndpoint() {
-                endpoint.value = lang.value;
-                form.action = lang.value;
-            }
+            const form = e.target;
+            const output = document.getElementById('responseOutput');
+            
+            const endpoint = document.getElementById('language').value;
+            const method = document.getElementById('httpMethod').value;
+            const encoding = document.getElementById('encoding').value;
+            
+            // Gather form data
+            const formData = new FormData(form);
+            const dataObj = Object.fromEntries(formData.entries());
 
-            function buildPayload() {
-                return {
-                    name: document.getElementById("name").value,
-                    message: document.getElementById("message").value,
-                    extra: document.getElementById("extra").value
-                };
-            }
+            let fetchOptions = {
+                method: method,
+                headers: {}
+            };
 
-            syncEndpoint();
-            lang.addEventListener("change", syncEndpoint);
-
-            form.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                syncEndpoint();
-
-                const url = form.action;
-                const m = method.value;
-                const ct = encoding.value;
-                const data = buildPayload();
-
-                let fetchUrl = url;
-                let options = { method: m, headers: {} };
-
-                if (m === "GET") {
-                    const params = new URLSearchParams(data);
-                    fetchUrl = url + "?" + params.toString();
+            // Setup Body and Headers based on encoding
+            if (method !== 'GET') {
+                if (encoding === 'application/json') {
+                    fetchOptions.headers['Content-Type'] = 'application/json';
+                    fetchOptions.body = JSON.stringify(dataObj);
                 } else {
-                    if (ct === "application/json") {
-                        options.headers["Content-Type"] = "application/json";
-                        options.body = JSON.stringify(data);
-                    } else {
-                        options.headers["Content-Type"] = "application/x-www-form-urlencoded";
-                        options.body = new URLSearchParams(data).toString();
-                    }
+                    // URL Encoded
+                    fetchOptions.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                    fetchOptions.body = new URLSearchParams(dataObj).toString();
                 }
+            } else {
+                // GET request handles data via URL params
+                const params = new URLSearchParams(dataObj).toString();
+                // Actual request logic would append params to endpoint
+            }
 
-                try {
-                    status.textContent = "Sending...";
-                    await fetch(fetchUrl, options); // ✅ ignore response completely
-                    status.textContent = `Sent ${m} to ${fetchUrl}`;
-                } catch (err) {
-                    status.textContent = "Send failed: " + err;
-                }
-            });
-        })();
+            output.textContent = "Sending request...";
+
+            // Note: In a real environment, 'endpoint' would be prepended with your server URL
+            fetch('http://127.0.0.1:5000/echo', fetchOptions)
+                .then(res => res.json())
+                .then(data => {
+                    output.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(err => {
+                    output.textContent = "Error: " + err.message + "\n(Make sure the Python server is running!)";
+                });
+        });
     </script>
 </body>
-
 </html>
