@@ -1,7 +1,6 @@
 use std::env;
 use std::fs::{self, File};
 use std::io::Read;
-use std::path::PathBuf;
 
 fn generate_session_id() -> String {
     let mut f = File::open("/dev/urandom").unwrap();

@@ -1,6 +1,5 @@
 use std::env;
 use std::fs;
-use std::path::PathBuf;
 
 fn main() {
     let cookie_name = "MySessionID";

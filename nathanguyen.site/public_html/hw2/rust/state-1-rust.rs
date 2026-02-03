@@ -1,7 +1,6 @@
 use std::env;
 use std::fs::{self, File};
 use std::io::{self, Read};
-use std::path::PathBuf;
 
 fn url_decode(s: &str) -> String {
     let mut res = String::new();
