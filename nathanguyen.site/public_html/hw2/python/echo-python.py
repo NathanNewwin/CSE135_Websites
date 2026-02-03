@@ -5,12 +5,12 @@ import sys
 import datetime
 from urllib.parse import parse_qs
 
-# Set response header to HTML so the browser renders it
+# Output HTML headers
 print("Content-Type: text/html")
 print()
 
 try:
-    # Gather Metadata
+    # Metadata collection
     response_data = {
         "hostname": os.environ.get('HTTP_HOST', 'N/A'),
         "datetime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -20,7 +20,7 @@ try:
         "data": {}
     }
 
-    # Handle Request Data
+    # Reading input data
     method = response_data["method"]
     content_length = int(os.environ.get('CONTENT_LENGTH', 0))
     content_type = os.environ.get('CONTENT_TYPE', '')
@@ -30,33 +30,31 @@ try:
         if "application/json" in content_type:
             response_data["data"] = json.loads(body)
         else:
-            # Parses standard form data
             response_data["data"] = {k: v[0] for k, v in parse_qs(body).items()}
     else:
-        # GET method data
         query_string = os.environ.get('QUERY_STRING', '')
         response_data["data"] = {k: v[0] for k, v in parse_qs(query_string).items()}
 
-    # Output the result wrapped in your site's styling
+    # Render HTML Response
     print(f"""
     <!DOCTYPE html>
     <html>
     <head>
         <link rel="stylesheet" href="/style.css">
-        <title>Echo Response</title>
+        <title>Echo Python</title>
     </head>
     <body>
         <div class="page">
             <main>
                 <header class="course-header">
-                    <h1 class="course-title">Echo Response</h1>
-                    <p class="course-subtitle">Server-side Python Result</p>
+                    <h1 class="course-title">Echo Python</h1>
+                    <p class="course-subtitle">Request processed via Python CGI</p>
                 </header>
                 <section class="card active">
-                    <div class="card-header"><h2>JSON Data</h2></div>
-                    <pre style="color: #8ab4f8; padding-top: 15px;">{json.dumps(response_data, indent=2)}</pre>
+                    <div class="card-header"><h2>Echo Results</h2></div>
+                    <pre style="color: #8ab4f8; padding: 15px; overflow-x: auto;">{json.dumps(response_data, indent=2)}</pre>
                     <div class="hw2-footer">
-                        <a href="../../echo-form.html">← Back to Form</a>
+                        <a href="/hw2/echo-form.html">Return to Form</a>
                     </div>
                 </section>
             </main>
@@ -64,6 +62,5 @@ try:
     </body>
     </html>
     """)
-
 except Exception as e:
-    print(f"<html><body><h1>Error</h1><p>{str(e)}</p></body></html>")
+    print(f"<html><body><h1>Script Error</h1><pre>{str(e)}</pre></body></html>")

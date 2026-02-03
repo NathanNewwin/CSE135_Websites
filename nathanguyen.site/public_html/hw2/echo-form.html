@@ -3,64 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <title>Echo Form</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="page">
         <main>
             <header class="course-header">
-                <h1 class="course-title">Echo Form</h1>
+                <h1 class="course-title">echo-language-name</h1>
+                <p class="course-subtitle">Dynamic Endpoint Tester</p>
             </header>
 
             <section class="card active">
-                <div class="card-header"><h2>Request Configuration</h2></div>
+                <div class="card-header"><h2>Configuration</h2></div>
                 
                 <form id="echoForm" action="hw2/python/echo-python.py" method="POST">
                     <div class="hw2-grid">
                         <div class="hw2-col">
-                            <label for="method">Method:</label>
-                            <select id="method" name="_http_method">
-                                <option value="POST">POST</option>
-                                <option value="GET">GET</option>
+                            <h3 class="hw2-col-title">Language</h3>
+                            <select id="endpoint" name="endpoint" style="width: 100%; padding: 5px;">
+                                <option value="hw2/python/echo-python.py">Python</option>
+                                <option value="hw2/nodejs/echo-node">Node.js</option>
+                                <option value="hw2/php/echo-php.php">PHP</option>
                             </select>
                         </div>
 
                         <div class="hw2-col">
-                            <label for="encoding">Encoding:</label>
-                            <select name="_encoding">
+                            <h3 class="hw2-col-title">Method</h3>
+                            <select id="method" name="method" style="width: 100%; padding: 5px;">
+                                <option value="GET">GET</option>
+                                <option value="POST" selected>POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+
+                        <div class="hw2-col">
+                            <h3 class="hw2-col-title">Encoding</h3>
+                            <select id="encoding" name="encoding" style="width: 100%; padding: 5px;">
                                 <option value="application/x-www-form-urlencoded">URL Encoded</option>
+                                <option value="application/json">JSON</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="card" style="border-style: dashed; margin-top: 20px;">
-                        <h3>Payload Data</h3>
+                    <div class="card" style="border-style: dashed; margin-top: 25px;">
+                        <h3 class="hw2-col-title">Request Payload</h3>
                         <div style="display: flex; gap: 10px; flex-direction: column;">
-                            <input type="text" name="message" placeholder="Key" value="message">
-                            <input type="text" name="value" placeholder="Value" value="Hello World">
+                            <input type="text" name="test_key" placeholder="Key" value="platform">
+                            <input type="text" name="test_value" placeholder="Value" value="Gemini-CGI">
                         </div>
                     </div>
 
-                    <button type="submit" class="hw2-tab is-active" style="margin-top: 15px; width: 100%;">
-                        Submit to Python Script
+                    <button type="submit" class="hw2-tab is-active" style="margin-top: 20px; width: 100%;">
+                        Submit Request
                     </button>
                 </form>
             </section>
         </main>
 
         <aside class="sidebar">
-            <h3>Standard Submission</h3>
-            <p>This form uses default browser behavior. Submitting will take you directly to the Python script's output page.</p>
+            <h3>System Status</h3>
+            <noscript>
+                <p style="color: #ffb3b3;"><strong>JS Disabled:</strong> Falling back to POST / Python endpoint.</p>
+            </noscript>
+            <p id="js-status" style="color: #b3ffb3;"><strong>JS Enabled:</strong> Methods and Endpoints are fully dynamic.</p>
         </aside>
     </div>
 
     <script>
-        // Optional: Dynamically change form method based on dropdown selection
-        const methodSelect = document.getElementById('method');
         const form = document.getElementById('echoForm');
-        
+        const endpointSelect = document.getElementById('endpoint');
+        const methodSelect = document.getElementById('method');
+
+        // Logic for Script-Off Fallback: 
+        // We update the form action/method whenever the user changes the dropdown,
+        // so even a standard submit hits the right target if JS is on.
+        endpointSelect.addEventListener('change', () => {
+            form.action = endpointSelect.value;
+        });
+
         methodSelect.addEventListener('change', () => {
-            form.method = methodSelect.value;
+            // HTML forms only natively support GET/POST
+            if (methodSelect.value === 'GET' || methodSelect.value === 'POST') {
+                form.method = methodSelect.value;
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            const method = methodSelect.value;
+            const encoding = document.getElementById('encoding').value;
+            const endpoint = endpointSelect.value;
+
+            // If it's a standard GET/POST with URL encoding, let the browser handle it
+            if ((method === 'GET' || method === 'POST') && encoding === 'application/x-www-form-urlencoded') {
+                return; // Browser proceeds to the action URL
+            }
+
+            // Otherwise (PUT/DELETE or JSON), we MUST use JS
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const dataObj = {};
+            formData.forEach((value, key) => { 
+                if(!['endpoint', 'method', 'encoding'].includes(key)) dataObj[key] = value; 
+            });
+
+            let fetchOptions = {
+                method: method,
+                headers: { 'Content-Type': encoding }
+            };
+
+            let targetUrl = endpoint;
+            if (method === 'GET') {
+                targetUrl += '?' + new URLSearchParams(dataObj).toString();
+            } else {
+                fetchOptions.body = (encoding === 'application/json') 
+                    ? JSON.stringify(dataObj) 
+                    : new URLSearchParams(dataObj);
+            }
+
+            fetch(targetUrl, fetchOptions)
+                .then(res => res.text())
+                .then(html => {
+                    document.open();
+                    document.write(html);
+                    document.close();
+                });
         });
     </script>
 </body>
