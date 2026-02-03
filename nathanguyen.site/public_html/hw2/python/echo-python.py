@@ -1,9 +1,5 @@
 #!/usr/bin/python3
-import os
-import sys
-import json
-import time
-import urllib.parse
+import os, sys, json, time, urllib.parse
 
 def read_body():
     try:
@@ -12,25 +8,22 @@ def read_body():
         length = 0
     return sys.stdin.read(length) if length > 0 else ""
 
-def parse_urlencoded(data):
-    parsed = urllib.parse.parse_qs(data, keep_blank_values=True)
-    return {k: v if len(v) > 1 else v[0] for k, v in parsed.items()}
+def parse_urlencoded(s):
+    qs = urllib.parse.parse_qs(s, keep_blank_values=True)
+    return {k: (v[0] if len(v) == 1 else v) for k, v in qs.items()}
 
-# --- Request metadata ---
 server_protocol = os.environ.get("SERVER_PROTOCOL", "")
-method = os.environ.get("REQUEST_METHOD", "")
+method = os.environ.get("REQUEST_METHOD", "").upper()
 hostname = os.environ.get("SERVER_NAME", "")
 ip = os.environ.get("REMOTE_ADDR", "")
 user_agent = os.environ.get("HTTP_USER_AGENT", "")
 timestamp = time.ctime()
 
-# --- Query data ---
 raw_query = os.environ.get("QUERY_STRING", "")
 parsed_query = parse_urlencoded(raw_query) if raw_query else {}
 
-# --- Body data ---
+content_type = (os.environ.get("CONTENT_TYPE") or "").split(";")[0].strip().lower()
 raw_body = read_body()
-content_type = (os.environ.get("CONTENT_TYPE") or "").split(";")[0]
 
 parsed_body = None
 body_error = None
@@ -40,27 +33,25 @@ if raw_body:
         try:
             parsed_body = json.loads(raw_body)
         except Exception as e:
-            body_error = str(e)
+            body_error = f"Invalid JSON: {e}"
             parsed_body = raw_body
     elif content_type == "application/x-www-form-urlencoded":
         parsed_body = parse_urlencoded(raw_body)
     else:
         parsed_body = raw_body
 
-# --- Output ---
 print("Cache-Control: no-cache")
 print("Content-Type: text/html")
 print()
 
-print(f"""<!DOCTYPE html>
+print(f"""<!doctype html>
 <html>
 <head>
-  <title>Python General Echo</title>
+  <title>Python Echo</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-
-<h1 align=center;">Python General Echo</h1>
+<h1>Python Echo</h1>
 <hr>
 
 <p><b>Server Protocol:</b> {server_protocol}</p>
@@ -69,6 +60,7 @@ print(f"""<!DOCTYPE html>
 <p><b>Time:</b> {timestamp}</p>
 <p><b>User Agent:</b> {user_agent}</p>
 <p><b>Client IP Address:</b> {ip}</p>
+<p><b>Content-Type:</b> {content_type if content_type else "(none)"}</p>
 
 <br>
 
@@ -82,8 +74,5 @@ print(f"""<!DOCTYPE html>
 <pre>{raw_body if raw_body else "(none)"}</pre>
 
 <p><b>Parsed Message Body:</b></p>
-<pre>{json.dumps(parsed_body, indent=2) if parsed_body else "(none)"}</pre>
-
-</body>
-</html>
-""")
+<pre>{json.dumps(parsed_body, indent=2) if parsed_body is not None else "(none)"}</pre>
+</body></html>""")
