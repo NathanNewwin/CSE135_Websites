@@ -13,7 +13,7 @@ address = os.environ.get("REMOTE_ADDR", "")
 message = {
     "title": "Hello, Python!",
     "heading": "Hello, Python!",
-    "message": "This page was generated with Python CGI",
+    "message": "Nathan says hello! This page was generated with Python CGI",
     "time": date,
     "IP": address
 }

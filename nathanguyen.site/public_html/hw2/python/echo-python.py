@@ -56,21 +56,20 @@ print(f"""<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Echo</title>
+    <title>Echo Python</title>
     <link rel="stylesheet" href="/hw2/style.css">
 </head>
 <body>
 <div class="page">
     
     <header class="course-header">
-        <h1 class="course-title">Python Echo</h1>
-        <p class="course-subtitle">Backend Response</p>
+        <h1 class="course-title">Echo Python</h1>
     </header>
 
     <div class="card active">
         <h2>Server Details</h2>
         <p><strong>Method:</strong> {html.escape(method)}</p>
-        <p><strong>Encoding:</strong> {html.escape(content_type)}</p>
+        <p><strong>Encoding:</strong> {html.escape(content_type if content_type else "N/A")}</p>
         <p><strong>Host:</strong> {html.escape(server_name)}</p>
         <p><strong>IP:</strong> {html.escape(remote_addr)}</p>
         <p><strong>Time:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
