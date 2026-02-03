@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Orbitron:wght@400..900&family=Space+Grotesk:wght@300..700&display=swap');
+
+body {
+    font-family: "JetBrains Mono", monospace;
+    color: #eeeeee;
+    background-color: #0f0f0f;
+    margin: 0;
+}
+
+.page {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 16px;
+    display: grid;
+    /* Left column takes remaining space, Right column fixed width matching screenshot sidebar */
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* --- Container & Card Styles --- */
+.course-header,
+.sidebar,
+.card {
+    border-radius: 15px;
+    border: 2px solid #b39eb5;
+    /* Purple border */
+    padding: 20px;
+    background-color: #1e1e2e;
+    /* Dark purple/grey background */
+    margin-bottom: 24px;
+}
+
+.course-title {
+    margin: 0;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.course-subtitle {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.card h2,
+.sidebar h2,
+.sidebar h3 {
+    margin: 0 0 12px 0;
+    font-size: 1.2rem;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eeeeee;
+}
+
+/* --- Form Elements Styling --- */
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #c3b1e1;
+}
+
+/* Inputs, Selects, Textareas */
+.hw2-tab,
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid #5a5a7a;
+    background-color: #2b2b3b;
+    /* Input background */
+    color: #ffffff;
+    font-family: inherit;
+    box-sizing: border-box;
+    /* Ensures padding doesn't break width */
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #8ab4f8;
+    background-color: #323246;
+}
+
+/* Fix for the dropdown option colors */
+option {
+    background-color: #2b2b3b;
+    color: #ffffff;
+}
+
+/* Button Styling */
+button.hw2-tab {
+    cursor: pointer;
+    background-color: #373754;
+    border: 1px solid #b39eb5;
+    font-weight: bold;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+button.hw2-tab:hover {
+    background-color: #4b4b6a;
+}
+
+/* --- Tables (for response data) --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td,
+th {
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+
+th {
+    color: #eeeeee;
+    font-weight: bold;
+}
+
+td:first-child {
+    color: #b39eb5;
+    /* Purple keys */
+    font-weight: 500;
+    width: 120px;
+}
+
+/* --- Links --- */
+a {
+    color: #8ab4f8;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* --- Layout Specifics --- */
+.left-col {
+    display: flex;
+    flex-direction: column;
+    /* Min-height to push Status to bottom if needed, though flex gap handles most */
+    justify-content: flex-start;
+}
