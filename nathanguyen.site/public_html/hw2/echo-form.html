@@ -3,48 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Echo Form</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="page">
         <main>
             <header class="course-header">
-                <h1 class="course-title">Echo Service</h1>
-                <p class="course-subtitle">Test HTTP Methods and Encodings</p>
+                <h1 class="course-title">Echo Form</h1>
             </header>
 
             <section class="card active">
                 <div class="card-header"><h2>Request Configuration</h2></div>
                 
-                <noscript>
-                    <p style="color: #ffb3b3;">JavaScript is disabled. Using default GET method to Python endpoint.</p>
-                </noscript>
-
-                <form id="echoForm" action="/hw2/python/echo-python.py" method="GET">
+                <form id="echoForm" action="hw2/python/echo-python.py" method="POST">
                     <div class="hw2-grid">
                         <div class="hw2-col">
-                            <label for="endpoint">Endpoint:</label>
-                            <select id="endpoint" name="endpoint">
-                                <option value="/hw2/python/echo-python.py">Python (CGI)</option>
-                                <option value="/echo-php">PHP (Placeholder)</option>
-                            </select>
-                        </div>
-
-                        <div class="hw2-col">
                             <label for="method">Method:</label>
-                            <select id="method" name="_method">
-                                <option value="GET">GET</option>
+                            <select id="method" name="_http_method">
                                 <option value="POST">POST</option>
-                                <option value="PUT">PUT</option>
-                                <option value="DELETE">DELETE</option>
+                                <option value="GET">GET</option>
                             </select>
                         </div>
 
                         <div class="hw2-col">
                             <label for="encoding">Encoding:</label>
-                            <select id="encoding">
+                            <select name="_encoding">
                                 <option value="application/x-www-form-urlencoded">URL Encoded</option>
-                                <option value="application/json">JSON</option>
                             </select>
                         </div>
                     </div>
@@ -52,64 +36,31 @@
                     <div class="card" style="border-style: dashed; margin-top: 20px;">
                         <h3>Payload Data</h3>
                         <div style="display: flex; gap: 10px; flex-direction: column;">
-                            <input type="text" name="sample_key" placeholder="Key" value="message">
-                            <input type="text" name="sample_value" placeholder="Value" value="Hello World">
+                            <input type="text" name="message" placeholder="Key" value="message">
+                            <input type="text" name="value" placeholder="Value" value="Hello World">
                         </div>
                     </div>
 
-                    <button type="submit" class="hw2-tab is-active" style="margin-top: 15px; width: 100%;">Submit Request</button>
+                    <button type="submit" class="hw2-tab is-active" style="margin-top: 15px; width: 100%;">
+                        Submit to Python Script
+                    </button>
                 </form>
             </section>
-
-            <section class="card inactive" id="resultsSection" style="display: none;">
-                <div class="card-header"><h2>Response Echo</h2></div>
-                <pre id="responseOutput" style="white-space: pre-wrap; color: #8ab4f8;"></pre>
-            </section>
         </main>
+
+        <aside class="sidebar">
+            <h3>Standard Submission</h3>
+            <p>This form uses default browser behavior. Submitting will take you directly to the Python script's output page.</p>
+        </aside>
     </div>
 
     <script>
+        // Optional: Dynamically change form method based on dropdown selection
+        const methodSelect = document.getElementById('method');
         const form = document.getElementById('echoForm');
         
-        form.addEventListener('submit', async (e) => {
-            // If JS is on, we take over the submission
-            e.preventDefault();
-            
-            const endpoint = document.getElementById('endpoint').value;
-            const method = document.getElementById('method').value;
-            const encoding = document.getElementById('encoding').value;
-            const formData = new FormData(form);
-            
-            // Build the data object
-            const data = {};
-            formData.forEach((value, key) => { 
-                if(!key.startsWith('_') && key !== 'endpoint') data[key] = value; 
-            });
-
-            let options = {
-                method: method,
-                headers: { 'Content-Type': encoding }
-            };
-
-            if (method !== 'GET') {
-                options.body = encoding === 'application/json' 
-                    ? JSON.stringify(data) 
-                    : new URLSearchParams(data);
-            } else {
-                // For GET, append params to URL
-                const params = new URLSearchParams(data);
-                var url = `${endpoint}?${params.toString()}`;
-            }
-
-            try {
-                const response = await fetch(url || endpoint, options);
-                const result = await response.json();
-                
-                document.getElementById('resultsSection').style.display = 'block';
-                document.getElementById('responseOutput').textContent = JSON.stringify(result, null, 2);
-            } catch (err) {
-                alert('Error connecting to server. Make sure CGI is enabled.');
-            }
+        methodSelect.addEventListener('change', () => {
+            form.method = methodSelect.value;
         });
     </script>
 </body>
