@@ -47,7 +47,7 @@ print(f"""<!DOCTYPE html>
     </header>
 
     <div class="card active">
-        <h2>Session Info</h2>
+        <h2>State Data</h2>
         <p><strong>Name:</strong> {display_name}</p>
         <p><strong>Session ID:</strong> <span style="color: #8ab4f8; font-family: monospace;">{sid}</span></p>
     </div>
@@ -55,10 +55,8 @@ print(f"""<!DOCTYPE html>
     <div class="card">
         <h2>Actions</h2>
         <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="state-1-python.py" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">&larr; Back to Page 1</a>
-            
+            <a href="state-1-python.py" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">State Page 1</a>
             <a href="session-form-python.html" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Form</a>
-
             <form action="state-destroy-python.py" method="POST" style="margin: 0;">
                 <button type="submit" class="hw2-tab" style="background-color: #543737; border-color: #b59e9e;">Destroy Session</button>
             </form>
