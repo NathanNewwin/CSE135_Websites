@@ -44,7 +44,6 @@ print(f"""<!DOCTYPE html>
 <div class="page">
     <header class="course-header">
         <h1 class="course-title">State Page 2</h1>
-        <p class="course-subtitle">Reading Saved Data</p>
     </header>
 
     <div class="card active">
@@ -55,17 +54,15 @@ print(f"""<!DOCTYPE html>
 
     <div class="card">
         <h2>Actions</h2>
-        <div style="display: flex; gap: 10px; flex-direction: column;">
-            <a href="state-1-python.py" style="text-align: center; display: block; padding: 10px; border: 1px solid #5a5a7a; border-radius: 8px;">&larr; Back to Page 1</a>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="state-1-python.py" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">&larr; Back to Page 1</a>
             
+            <a href="session-form-python.html" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Form</a>
+
             <form action="state-destroy-python.py" method="POST" style="margin: 0;">
                 <button type="submit" class="hw2-tab" style="background-color: #543737; border-color: #b59e9e;">Destroy Session</button>
             </form>
         </div>
-    </div>
-    
-    <div style="text-align: center; margin-top: 10px;">
-        <a href="session-form-python.html">&larr; Back to Form</a>
     </div>
 </div>
 </body>

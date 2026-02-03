@@ -36,19 +36,18 @@ print(f"""<!DOCTYPE html>
 <body>
 <div class="page">
     <header class="course-header">
-        <h1 class="course-title">Logged Out</h1>
-        <p class="course-subtitle">Session Destroyed</p>
+        <h1 class="course-title">Session Destroyed</h1>
     </header>
 
     <div class="card active">
         <h2>Status</h2>
         <p>{message}</p>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 10px; text-align: center; margin-top: 20px;">
-        <a href="session-form-python.html" style="font-weight: bold;">Back to Form</a>
-        <a href="state-1-python.py">Back to Page 1</a>
-        <a href="state-2-python.py">Back to Page 2</a>
+        
+        <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <a href="session-form-python.html" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Form</a>
+                <a href="state-1-python.py" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Page 1</a>
+                <a href="state-2-python.py" style="text-align: center; display: block; padding: 12px; border: 1px solid #5a5a7a; border-radius: 8px; background-color: #2b2b3b; color: #fff; text-decoration: none;">Back to Page 2</a>
+        </div>
     </div>
 </div>
 </body>
