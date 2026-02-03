@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echo Chamber</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        #js-config {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,61 +22,114 @@
             <p class="course-subtitle">Test HTTP Methods & Encodings</p>
         </header>
 
-        <main class="card active">
-            <h2>Request Config</h2>
+        <div id="js-config">
+            <main class="card active">
+                <h2>Request Config</h2>
 
-            <form id="echoForm" action="python/echo-python.py" method="POST">
+                <form id="echoForm" action="python/echo-python.py" method="POST">
 
-                <label for="endpoint">Target Endpoint</label>
-                <select id="endpoint" name="endpoint">
-                    <option value="python/echo-python.py">Python</option>
-                    <option value="node/echo-node.js">Node.js (TBD)</option>
-                    <option value="rust/echo-rust">Rust (TBD)</option>
-                </select>
+                    <label for="endpoint">Target Endpoint</label>
+                    <select id="endpoint" name="endpoint">
+                        <option value="python/echo-python.py">Python</option>
+                        <option value="node/echo-node.js">Node.js (TBD)</option>
+                        <option value="rust/echo-rust">Rust (TBD)</option>
+                    </select>
 
-                <label for="method">HTTP Method</label>
-                <select id="method" name="method">
-                    <option value="GET">GET</option>
-                    <option value="POST" selected>POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="DELETE">DELETE</option>
-                </select>
+                    <label for="method">HTTP Method</label>
+                    <select id="method" name="method">
+                        <option value="GET">GET</option>
+                        <option value="POST" selected>POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
 
-                <label for="encoding">Encoding</label>
-                <select id="encoding" name="encoding">
-                    <option value="application/x-www-form-urlencoded">Form URL-Encoded</option>
-                    <option value="application/json">Application/JSON</option>
-                </select>
+                    <label for="encoding">Encoding</label>
+                    <select id="encoding" name="encoding">
+                        <option value="application/x-www-form-urlencoded">Form URL-Encoded</option>
+                        <option value="application/json">Application/JSON</option>
+                    </select>
 
-                <div style="border-top: 1px solid #333; margin: 10px 0 20px;"></div>
-                <h3>Payload Data</h3>
+                    <div style="border-top: 1px solid #333; margin: 10px 0 20px;"></div>
+                    <h3>Payload Data</h3>
 
-                <label for="message_title">Message Title</label>
-                <input type="text" id="message_title" name="title" placeholder="Hello World">
+                    <label for="message_title">Message Title</label>
+                    <input type="text" id="message_title" name="title" placeholder="Title">
 
-                <label for="message_body">Message Body</label>
-                <textarea id="message_body" name="body" rows="5" placeholder="Type your content here..."></textarea>
+                    <label for="message_body">Message Body</label>
+                    <textarea id="message_body" name="body" rows="5" placeholder="Type your body here..."></textarea>
 
-                <button type="submit" class="hw2-tab">Send Request</button>
-            </form>
-        </main>
+                    <button type="submit" class="hw2-tab">Send Request</button>
+                </form>
+            </main>
+        </div>
+
+        <noscript>
+
+            <div class="card active">
+                <h2>Python GET</h2>
+                <p style="font-size:0.8rem; margin-bottom:15px; opacity:0.8;">Standard Query String Request</p>
+                <form action="python/echo-python.py" method="GET">
+                    <label>Message Title</label>
+                    <input type="text" name="title" placeholder="Hello World">
+
+                    <label>Message Body</label>
+                    <textarea name="body" rows="3"></textarea>
+
+                    <button type="submit" class="hw2-tab">Send GET</button>
+                </form>
+            </div>
+
+            <div class="card active">
+                <h2>Python POST</h2>
+                <p style="font-size:0.8rem; margin-bottom:15px; opacity:0.8;">Standard Form-Data Request</p>
+                <form action="python/echo-python.py" method="POST">
+                    <label>Message Title</label>
+                    <input type="text" name="title" placeholder="Hello World">
+
+                    <label>Message Body</label>
+                    <textarea name="body" rows="3"></textarea>
+
+                    <button type="submit" class="hw2-tab">Send POST</button>
+                </form>
+            </div>
+
+            <div class="card" style="border-color: #ff8888;">
+                <h3>Limitation</h3>
+                <p>Without JavaScript, HTML Forms are limited to <code>GET</code> and <code>POST</code> methods only.
+                    <code>PUT</code>, <code>DELETE</code>, and <code>JSON</code> encoding are not supported natively by
+                    the browser.</p>
+            </div>
+
+        </noscript>
+
 
         <aside class="card">
             <h2>Status</h2>
             <p><strong>JavaScript:</strong> <span id="js-status" style="color: #ff8888;">OFF</span></p>
-            <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.5;">
-                If JS is OFF, the form defaults to <code>POST</code> and targeting the Python endpoint using standard
-                URL encoding.
-            </p>
+
+            <div id="js-help-text">
+                <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.5;">
+                    You are currently in <strong>Reduced Mode</strong>. The main dynamic form is hidden, and individual
+                    fallback forms are displayed above.
+                </p>
+            </div>
         </aside>
 
     </div>
 
     <script>
-        // Update UI to show JS is active
+        document.getElementById('js-config').style.display = 'block';
+
         const jsStatus = document.getElementById('js-status');
         jsStatus.textContent = "ON";
         jsStatus.style.color = "#8ab4f8";
+
+        // 3. Update Help Text
+        document.getElementById('js-help-text').innerHTML = `
+        <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.5;">
+            <strong>Full Mode Active.</strong> You can dynamically switch endpoints, methods (PUT/DELETE), and encodings (JSON) using the form above.
+        </p>
+    `;
 
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('echoForm');
