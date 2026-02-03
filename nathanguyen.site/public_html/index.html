@@ -1,114 +1,111 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSE 135 Mainpage</title>
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
-    <script src="/hw2-tabs.js" defer></script>
-  </head>
 
-  <body>
-    <div class="page">
-      <main class="main">
-        <header class="course-header">
-          <h1 class="course-title">CSE 135</h1>
-          <h2 class="course-subtitle">Winter 2026</h2>
-        </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSE 135 Mainpage</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <script src="/hw2-tabs.js" defer></script>
+</head>
 
-        <section class="card inactive">
-          <h2 class="card-header">Homework 1</h2>
-          <ul class="card-links">
-            <li><a href="hw1/hello.php">PHP</a></li>
-            <li><a href="hw1/report.html">Report</a></li>
-          </ul>
-        </section>
+<body>
+  <div class="page">
+    <main class="main">
+      <header class="course-header">
+        <h1 class="course-title">CSE 135</h1>
+        <h2 class="course-subtitle">Winter 2026</h2>
+      </header>
 
-        <section class="card active" id="hw2">
-          <h2 class="card-header">Homework 2</h2>
+      <section class="card inactive">
+        <h2 class="card-header">Homework 1</h2>
+        <ul class="card-links">
+          <li><a href="hw1/hello.php">PHP</a></li>
+          <li><a href="hw1/report.html">Report</a></li>
+        </ul>
+      </section>
 
-          <div class="hw2-shell">
-            <div class="hw2-nav" role="tablist" aria-label="Homework 2 languages">
-              <button class="hw2-tab is-active" role="tab" aria-selected="true" data-target="hw2-perl">Perl</button>
-              <button class="hw2-tab" role="tab" aria-selected="false" data-target="hw2-python">Python</button>
-              <button class="hw2-tab" role="tab" aria-selected="false" data-target="hw2-node">NodeJs</button>
-              <button class="hw2-tab" role="tab" aria-selected="false" data-target="hw2-rust">Rust</button>
+      <section class="card active" id="hw2">
+        <h2 class="card-header">Homework 2</h2>
+
+        <div class="hw2-shell">
+          <div class="hw2-nav" role="tablist" aria-label="Homework 2 languages">
+            <button class="hw2-tab is-active" role="tab" aria-selected="true" data-target="hw2-perl">Perl</button>
+            <button class="hw2-tab" role="tab" aria-selected="false" data-target="hw2-python">Python</button>
+            <button class="hw2-tab" role="tab" aria-selected="false" data-target="hw2-node">NodeJs</button>
+            <button class="hw2-tab" role="tab" aria-selected="false" data-target="hw2-rust">Rust</button>
+          </div>
+
+          <div class="hw2-panel">
+            <div class="hw2-pane is-open" id="hw2-perl" role="tabpanel">
+              <h3 class="hw2-title">Perl</h3>
+              <ul class="card-links">
+                <li><a href="hw2/perl/perl-hello-html-world.pl">Hello World HTML</a></li>
+                <li><a href="hw2/perl/perl-hello-json-world.pl">Hello World JSON</a></li>
+                <li><a href="hw2/perl/perl-env.pl">Environmental Variables</a></li>
+                <li><a href="hw2/perl/perl-env-pm.pl">Environmental Variables Pm</a></li>
+                <li><a href="hw2/perl/perl-get-echo.pl">Get Echo</a></li>
+                <li><a href="hw2/perl/perl-post-echo.pl">Post Echo</a></li>
+                <li><a href="hw2/perl/perl-general-echo.pl">General Echo</a></li>
+                <li><a href="hw2/perl/perl-cgiform.html">Sessions</a></li>
+              </ul>
             </div>
 
-            <div class="hw2-panel">
-              <div class="hw2-pane is-open" id="hw2-perl" role="tabpanel">
-                <h3 class="hw2-title">Perl</h3>
-                <ul class="card-links">
-                  <li><a href="hw2/perl/perl-hello-html-world.pl">Hello World HTML</a></li>
-                  <li><a href="hw2/perl/perl-hello-json-world.pl">Hello World JSON</a></li>
-                  <li><a href="hw2/perl/perl-env.pl">Environmental Variables</a></li>
-                  <li><a href="hw2/perl/perl-env-pm.pl">Environmental Variables Pm</a></li>
-                  <li><a href="hw2/perl/perl-get-echo.pl">Get Echo</a></li>
-                  <li><a href="hw2/perl/perl-post-echo.pl">Post Echo</a></li>
-                  <li><a href="hw2/perl/perl-general-echo.pl">General Echo</a></li>
-                  <li><a href="hw2/perl/perl-cgiform.html">Sessions</a></li>
-                </ul>
-              </div>
+            <div class="hw2-pane" id="hw2-python" role="tabpanel">
+              <h3 class="hw2-title">Python</h3>
+              <ul class="card-links">
+                <li><a href="hw2/python/hello-html-python.py">Hello World HTML</a></li>
+                <li><a href="hw2/python/hello-json-python.py">Hello World JSON</a></li>
+                <li><a href="hw2/python/environment-python.py">Environmental Variables</a></li>
+                <li><a href="hw2/python/echo-python.py">Echo</a></li>
+                <li><a href="hw2/python/">Sessions</a></li>
+              </ul>
+            </div>
 
-              <div class="hw2-pane" id="hw2-python" role="tabpanel">
-                <h3 class="hw2-title">Python</h3>
-                <ul class="card-links">
-                  <li><a href="hw2/python/hello-html-python.py">Hello World HTML</a></li>
-                  <li><a href="hw2/python/hello-json-python.py">Hello World JSON</a></li>
-                  <li><a href="hw2/python/echo-python.py">Environmental Variables</a></li>
-                  <li><a href="hw2/python/">Get Echo</a></li>
-                  <li><a href="hw2/python/">Post Echo</a></li>
-                  <li><a href="hw2/python/">General Echo</a></li>
-                  <li><a href="hw2/python/">Sessions</a></li>
-                </ul>
-              </div>
+            <div class="hw2-pane" id="hw2-node" role="tabpanel">
+              <h3 class="hw2-title">NodeJs</h3>
+              <ul class="card-links">
+                <li><a href="hw2/node/">Hello World HTML</a></li>
+                <li><a href="hw2/node/">Hello World JSON</a></li>
+                <li><a href="hw2/node/">Environmental Variables</a></li>
+                <li><a href="hw2/node/">Echo</a></li>
+                <li><a href="hw2/node/">Sessions</a></li>
+              </ul>
+            </div>
 
-              <div class="hw2-pane" id="hw2-node" role="tabpanel">
-                <h3 class="hw2-title">NodeJs</h3>
-                <ul class="card-links">
-                  <li><a href="hw2/node/">Hello World HTML</a></li>
-                  <li><a href="hw2/node/">Hello World JSON</a></li>
-                  <li><a href="hw2/node/">Environmental Variables</a></li>
-                  <li><a href="hw2/node/">Get Echo</a></li>
-                  <li><a href="hw2/node/">Post Echo</a></li>
-                  <li><a href="hw2/node/">General Echo</a></li>
-                  <li><a href="hw2/node/">Sessions</a></li>
-                </ul>
-              </div>
-
-              <div class="hw2-pane" id="hw2-rust" role="tabpanel">
-                <h3 class="hw2-title">Rust</h3>
-                <ul class="card-links">
-                  <li><a href="hw2/rust/">Hello World HTML</a></li>
-                  <li><a href="hw2/rust/">Hello World JSON</a></li>
-                  <li><a href="hw2/rust/">Environmental Variables</a></li>
-                  <li><a href="hw2/rust/">Get Echo</a></li>
-                  <li><a href="hw2/rust/">Post Echo</a></li>
-                  <li><a href="hw2/rust/">General Echo</a></li>
-                  <li><a href="hw2/rust/">Sessions</a></li>
-                </ul>
-              </div>
+            <div class="hw2-pane" id="hw2-rust" role="tabpanel">
+              <h3 class="hw2-title">Rust</h3>
+              <ul class="card-links">
+                <li><a href="hw2/rust/">Hello World HTML</a></li>
+                <li><a href="hw2/rust/">Hello World JSON</a></li>
+                <li><a href="hw2/rust/">Environmental Variables</a></li>
+                <li><a href="hw2/rust/">Echo</a></li>
+                <li><a href="hw2/rust/">Sessions</a></li>
+              </ul>
             </div>
           </div>
-        </section>
+        </div>
+        <li><a href="hw2/echo-form.html">General Echo (Form)</a></li>
+      </section>
 
-        <section class="card inactive">
-          <h2 class="card-header">Analytics App</h2>
-          <div class="tbd">TBD</div>
-        </section>
-      </main>
+      <section class="card inactive">
+        <h2 class="card-header">Analytics App</h2>
+        <div class="tbd">TBD</div>
+      </section>
+    </main>
 
-      <aside class="sidebar">
-        <section class="profile">
-          <h3>Profile</h3>
-          <ul class="members">
-            <li>
-              <a href="./members/nathannguyen.html">Nathan Nguyen</a>
-            </li>
-          </ul>
-        </section>
-      </aside>
-    </div>
-  </body>
+    <aside class="sidebar">
+      <section class="profile">
+        <h3>Profile</h3>
+        <ul class="members">
+          <li>
+            <a href="./members/nathannguyen.html">Nathan Nguyen</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</body>
+
 </html>
