@@ -1,6 +1,7 @@
 use std::env;
 use std::io::{self, Read};
 use std::collections::HashMap;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 fn url_decode(s: &str) -> String {
     let mut res = String::new();
@@ -26,6 +27,7 @@ fn url_decode(s: &str) -> String {
 
 fn parse_query_string(input: &str) -> HashMap<String, String> {
     let mut map = HashMap::new();
+    if input.is_empty() { return map; }
     for pair in input.split('&') {
         let mut split = pair.splitn(2, '=');
         if let (Some(k), Some(v)) = (split.next(), split.next()) {
@@ -35,51 +37,53 @@ fn parse_query_string(input: &str) -> HashMap<String, String> {
     map
 }
 
-fn parse_json_value(json: &str, key: &str) -> String {
-    let search_key = format!("\"{}\"", key);
-    if let Some(idx) = json.find(&search_key) {
-        let remainder = &json[idx + search_key.len()..];
-        if let Some(colon_idx) = remainder.find(':') {
-            let value_part = &remainder[colon_idx + 1..].trim();
-            if value_part.starts_with('"') {
-                if let Some(end_quote) = value_part[1..].find('"') {
-                    return value_part[1..=end_quote].to_string();
-                }
+fn parse_json_manual(json: &str) -> HashMap<String, String> {
+    let mut map = HashMap::new();
+    let trimmed = json.trim();
+    if trimmed.starts_with('{') && trimmed.ends_with('}') {
+        let content = &trimmed[1..trimmed.len()-1];
+        for pair in content.split(',') {
+            let parts: Vec<&str> = pair.splitn(2, ':').collect();
+            if parts.len() == 2 {
+                let key = parts[0].trim().trim_matches('"');
+                let val = parts[1].trim().trim_matches('"');
+                map.insert(key.to_string(), val.to_string());
             }
         }
     }
-    String::from("Undefined")
+    map
 }
 
-
 fn main() {
-    println!("Content-Type: text/html\n");
+    let method = env::var("REQUEST_METHOD").unwrap_or_else(|_| "GET".to_string());
+    let content_type = env::var("CONTENT_TYPE").unwrap_or_else(|_| "".to_string());
+    let query_string = env::var("QUERY_STRING").unwrap_or_else(|_| "".to_string());
+    let remote_addr = env::var("REMOTE_ADDR").unwrap_or_else(|_| "Unknown".to_string());
+    let user_agent = env::var("HTTP_USER_AGENT").unwrap_or_else(|_| "Unknown".to_string());
+    let server_name = env::var("SERVER_NAME").unwrap_or_else(|_| "localhost".to_string());
+    
+    // Simple timestamp logic
+    let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+    let time_display = format!("Unix Timestamp: {}", now);
 
-    let method = env::var("REQUEST_METHOD").unwrap_or_default();
-    let query_string = env::var("QUERY_STRING").unwrap_or_default();
-    let protocol = env::var("SERVER_PROTOCOL").unwrap_or_default();
-    let content_type = env::var("CONTENT_TYPE").unwrap_or_default();
-
-    let mut body_raw = String::new();
-    io::stdin().read_to_string(&mut body_raw).unwrap_or(0);
-
-    let mut title = String::from("Undefined");
-    let mut body_content = String::from("Undefined");
-
-    if method == "GET" {
-        let params = parse_query_string(&query_string);
-        if let Some(t) = params.get("title") { title = t.clone(); }
-        if let Some(b) = params.get("body") { body_content = b.clone(); }
+    let mut payload_data: HashMap<String, String> = HashMap::new();
+    
+    if method == "GET" || method == "DELETE" {
+        payload_data = parse_query_string(&query_string);
     } else {
-        if content_type.contains("application/json") {
-            title = parse_json_value(&body_raw, "title");
-            body_content = parse_json_value(&body_raw, "body");
-        } else {
-            let params = parse_query_string(&body_raw);
-            if let Some(t) = params.get("title") { title = t.clone(); }
-            if let Some(b) = params.get("body") { body_content = b.clone(); }
+        let mut body_raw = String::new();
+        io::stdin().read_to_string(&mut body_raw).unwrap_or(0);
+
+        if !body_raw.is_empty() {
+            if content_type.contains("application/json") {
+                payload_data = parse_json_manual(&body_raw);
+            } else {
+                payload_data = parse_query_string(&body_raw);
+            }
         }
     }
+
+    println!("Content-Type: text/html\n");
 
     println!(r#"<!DOCTYPE html>
 <html lang="en">
@@ -93,50 +97,54 @@ fn main() {
 <div class="page">
     
     <header class="course-header">
-        <h1 class="course-title">Echo Chamber</h1>
-        <p class="course-subtitle">Rust Processor</p>
+        <h1 class="course-title">Echo Rust</h1>
     </header>
 
-    <div class="card">
-        <h2>Message Details</h2>
-        <table>
-            <tr><th>Key</th><th>Value</th></tr>
-            <tr><td>Title</td><td>{}</td></tr>
-            <tr><td>Body</td><td>{}</td></tr>
-        </table>
+    <div class="card active">
+        <h2>Server Details</h2>
+        <p><strong>Method:</strong> {}</p>
+        <p><strong>Encoding:</strong> {}</p>
+        <p><strong>Host:</strong> {}</p>
+        <p><strong>IP:</strong> {}</p>
+        <p><strong>Time:</strong> {}</p>
     </div>
 
     <div class="card">
-        <h2>Request Details</h2>
-        <table>
-            <tr><th>Key</th><th>Value</th></tr>
-            <tr><td>Protocol</td><td>{}</td></tr>
-            <tr><td>Method</td><td>{}</td></tr>
-            <tr><td>Query String</td><td>{}</td></tr>
-        </table>
-    </div>
+        <h2>Received Body</h2>
+        <div style="padding-top: 5px;">"#, 
+        method, 
+        if content_type.is_empty() { "N/A" } else { &content_type }, 
+        server_name, 
+        remote_addr, 
+        time_display
+    );
 
-    <div class="card">
-        <h2>Server Headers</h2>
-        <table>
-            <tr><th>Header</th><th>Value</th></tr>"#, 
-        title, body_content, protocol, method, query_string);
-
-    let mut vars: Vec<(String, String)> = env::vars().collect();
-    vars.sort_by(|a, b| a.0.cmp(&b.0));
-    
-    for (key, value) in vars {
-        println!("<tr><td>{}</td><td>{}</td></tr>", key, value);
+    if payload_data.is_empty() {
+        println!("<p style='opacity: 0.6;'>No data parameters received.</p>");
+    } else {
+        println!("<table>");
+        println!("<tr><th>Key</th><th>Value</th></tr>");
+        for (k, v) in &payload_data {
+            println!("<tr><td>{}</td><td>{}</td></tr>", k, v);
+        }
+        println!("</table>");
     }
 
-    println!(r#"        </table>
+    println!(r#"        </div>
     </div>
 
-    <div style="text-align: center;">
-        <a href="../echo-form.html">&larr; Return to Form</a>
+    <div class="card">
+        <h3>User Agent</h3>
+        <p style="font-size: 0.85rem; line-height: 1.4; color: #8ab4f8; word-wrap: break-word;">
+            {}
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 10px;">
+        <a href="../echo-form.html" style="font-size: 1.1rem; font-weight: bold;">&larr; Return to Form</a>
     </div>
 
 </div>
 </body>
-</html>"#);
+</html>"#, user_agent);
 }
