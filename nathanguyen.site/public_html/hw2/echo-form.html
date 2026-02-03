@@ -2,103 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Echo Language Form</title>
+    <title>Echo Form</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="page">
+        <main>
+            <header class="course-header">
+                <h1 class="course-title">Echo Service</h1>
+                <p class="course-subtitle">Test HTTP Methods and Encodings</p>
+            </header>
 
-    <h2>Echo Endpoint Tester</h2>
-    
-    <noscript>
-        <p class="noscript-msg">JavaScript is disabled. The form will default to POST /echo with URL encoding.</p>
-    </noscript>
+            <section class="card active">
+                <div class="card-header"><h2>Request Configuration</h2></div>
+                
+                <noscript>
+                    <p style="color: #ffb3b3;">JavaScript is disabled. Using default GET method to Python endpoint.</p>
+                </noscript>
 
-    <form id="echoForm" action="/echo" method="POST">
-        <div class="form-group">
-            <label for="language">Target Language (Endpoint):</label>
-            <select id="language" name="language">
-                <option value="/echo-python">Python (/echo)</option>
-                <option value="/echo-nodejs">NodeJS (Demo only)</option>
-            </select>
-        </div>
+                <form id="echoForm" action="/cgi-bin/echo-python.py" method="GET">
+                    <div class="hw2-grid">
+                        <div class="hw2-col">
+                            <label for="endpoint">Endpoint:</label>
+                            <select id="endpoint" name="endpoint">
+                                <option value="/cgi-bin/echo-python.py">Python (CGI)</option>
+                                <option value="/echo-php">PHP (Placeholder)</option>
+                            </select>
+                        </div>
 
-        <div class="form-group">
-            <label for="httpMethod">HTTP Method:</label>
-            <select id="httpMethod" name="httpMethod">
-                <option value="GET">GET</option>
-                <option value="POST" selected>POST</option>
-                <option value="PUT">PUT</option>
-                <option value="DELETE">DELETE</option>
-            </select>
-        </div>
+                        <div class="hw2-col">
+                            <label for="method">Method:</label>
+                            <select id="method" name="_method">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
 
-        <div class="form-group">
-            <label for="encoding">Encoding:</label>
-            <select id="encoding" name="encoding">
-                <option value="application/x-www-form-urlencoded">x-www-form-urlencoded</option>
-                <option value="application/json">application/json</option>
-            </select>
-        </div>
+                        <div class="hw2-col">
+                            <label for="encoding">Encoding:</label>
+                            <select id="encoding">
+                                <option value="application/x-www-form-urlencoded">URL Encoded</option>
+                                <option value="application/json">JSON</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label for="message">Data Field (Message):</label>
-            <input type="text" id="message" name="message" value="Hello World">
-        </div>
+                    <div class="card" style="border-style: dashed; margin-top: 20px;">
+                        <h3>Payload Data</h3>
+                        <div style="display: flex; gap: 10px; flex-direction: column;">
+                            <input type="text" name="sample_key" placeholder="Key" value="message">
+                            <input type="text" name="sample_value" placeholder="Value" value="Hello World">
+                        </div>
+                    </div>
 
-        <button type="submit">Submit Request</button>
-    </form>
+                    <button type="submit" class="hw2-tab is-active" style="margin-top: 15px; width: 100%;">Submit Request</button>
+                </form>
+            </section>
 
-    <h3>Response:</h3>
-    <pre id="responseOutput">Submit the form to see the echo response...</pre>
+            <section class="card inactive" id="resultsSection" style="display: none;">
+                <div class="card-header"><h2>Response Echo</h2></div>
+                <pre id="responseOutput" style="white-space: pre-wrap; color: #8ab4f8;"></pre>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <h3>Instructions</h3>
+            <p>Select your preferred backend, HTTP verb, and encoding type. The server will bounce your data back to you.</p>
+        </aside>
+    </div>
 
     <script>
-        document.getElementById('echoForm').addEventListener('submit', function(e) {
-            // Prevent default form submission to handle via JS
+        const form = document.getElementById('echoForm');
+        
+        form.addEventListener('submit', async (e) => {
+            // If JS is on, we take over the submission
             e.preventDefault();
-
-            const form = e.target;
-            const output = document.getElementById('responseOutput');
             
-            const endpoint = document.getElementById('language').value;
-            const method = document.getElementById('httpMethod').value;
+            const endpoint = document.getElementById('endpoint').value;
+            const method = document.getElementById('method').value;
             const encoding = document.getElementById('encoding').value;
-            
-            // Gather form data
             const formData = new FormData(form);
-            const dataObj = Object.fromEntries(formData.entries());
+            
+            // Build the data object
+            const data = {};
+            formData.forEach((value, key) => { 
+                if(!key.startsWith('_') && key !== 'endpoint') data[key] = value; 
+            });
 
-            let fetchOptions = {
+            let options = {
                 method: method,
-                headers: {}
+                headers: { 'Content-Type': encoding }
             };
 
-            // Setup Body and Headers based on encoding
             if (method !== 'GET') {
-                if (encoding === 'application/json') {
-                    fetchOptions.headers['Content-Type'] = 'application/json';
-                    fetchOptions.body = JSON.stringify(dataObj);
-                } else {
-                    // URL Encoded
-                    fetchOptions.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-                    fetchOptions.body = new URLSearchParams(dataObj).toString();
-                }
+                options.body = encoding === 'application/json' 
+                    ? JSON.stringify(data) 
+                    : new URLSearchParams(data);
             } else {
-                // GET request handles data via URL params
-                const params = new URLSearchParams(dataObj).toString();
-                // Actual request logic would append params to endpoint
+                // For GET, append params to URL
+                const params = new URLSearchParams(data);
+                var url = `${endpoint}?${params.toString()}`;
             }
 
-            output.textContent = "Sending request...";
-
-            // Note: In a real environment, 'endpoint' would be prepended with your server URL
-            fetch('http://127.0.0.1:5000/echo', fetchOptions)
-                .then(res => res.json())
-                .then(data => {
-                    output.textContent = JSON.stringify(data, null, 2);
-                })
-                .catch(err => {
-                    output.textContent = "Error: " + err.message + "\n(Make sure the Python server is running!)";
-                });
+            try {
+                const response = await fetch(url || endpoint, options);
+                const result = await response.json();
+                
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('responseOutput').textContent = JSON.stringify(result, null, 2);
+            } catch (err) {
+                alert('Error connecting to server. Make sure CGI is enabled.');
+            }
         });
     </script>
 </body>

@@ -1,31 +1,42 @@
-from flask import Flask, request, jsonify
-from datetime import datetime
+#!/usr/bin/env python3
+import json
 import os
+import sys
+import datetime
+from urllib.parse import parse_qs
 
-app = Flask(__name__)
+# Set response header
+print("Content-Type: application/json")
+print()
 
-@app.route('/echo', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def echo_response():
-    # Gather request metadata
-    response_data = {
-        "hostname": request.host,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "user_agent": request.headers.get('User-Agent'),
-        "ip_address": request.remote_addr,
-        "method": request.method,
-        "payload": {}
+try:
+    # Gather Metadata
+    response = {
+        "hostname": os.environ.get('HTTP_HOST', 'N/A'),
+        "datetime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "user_agent": os.environ.get('HTTP_USER_AGENT', 'N/A'),
+        "ip_address": os.environ.get('REMOTE_ADDR', 'N/A'),
+        "method": os.environ.get('REQUEST_METHOD', 'GET'),
+        "data": {}
     }
 
-    # Handle data based on Content-Type
-    if request.method == 'GET':
-        response_data["payload"] = request.args.to_dict()
-    else:
-        if request.is_json:
-            response_data["payload"] = request.get_json()
+    # Handle Request Data
+    method = response["method"]
+    content_length = int(os.environ.get('CONTENT_LENGTH', 0))
+    content_type = os.environ.get('CONTENT_TYPE', '')
+
+    if method in ["POST", "PUT", "DELETE"] and content_length > 0:
+        body = sys.stdin.read(content_length)
+        if "application/json" in content_type:
+            response["data"] = json.loads(body)
         else:
-            response_data["payload"] = request.form.to_dict()
+            response["data"] = {k: v[0] for k, v in parse_qs(body).items()}
+    else:
+        # Fallback to Query String for GET
+        query_string = os.environ.get('QUERY_STRING', '')
+        response["data"] = {k: v[0] for k, v in parse_qs(query_string).items()}
 
-    return jsonify(response_data)
+    print(json.dumps(response, indent=2))
 
-if __name__ == '__main__':
-    app.run(port=5000)
+except Exception as e:
+    print(json.dumps({"error": str(e)}))
