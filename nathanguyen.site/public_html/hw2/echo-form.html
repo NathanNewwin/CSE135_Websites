@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Form</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        /* Simple utility to hide elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Utility for the response area */
+        #response-area {
+            margin-top: 24px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <header class="course-header">
+            <h1 class="course-title">Echo Chamber</h1>
+            <p class="course-subtitle">Test HTTP Methods & Encodings</p>
+        </header>
+
+        <main class="card active">
+            <div class="card-header">
+                <h2>Request Config</h2>
+            </div>
+
+            <form id="echoForm" action="python/echo-python.py" method="POST" class="card-links">
+
+                <div class="hw2-shell">
+                    <div class="hw2-nav">
+
+                        <label for="endpoint">Target Endpoint</label>
+                        <select id="endpoint" name="endpoint" class="hw2-tab">
+                            <option value="python/echo-python.py" selected>Python</option>
+                            <option value="node/echo-node.js">Node.js (TBD)</option>
+                            <option value="rust/echo-rust">Rust (TBD)</option>
+                        </select>
+
+                        <label for="method">HTTP Method</label>
+                        <select id="method" name="method" class="hw2-tab">
+                            <option value="GET">GET</option>
+                            <option value="POST" selected>POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+
+                        <label for="encoding">Encoding</label>
+                        <select id="encoding" name="encoding" class="hw2-tab">
+                            <option value="application/x-www-form-urlencoded">Form URL-Encoded</option>
+                            <option value="application/json">Application/JSON</option>
+                        </select>
+                    </div>
+
+                    <div class="hw2-panel">
+                        <h3 class="hw2-title">Payload Data</h3>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div>
+                                <label for="message_title">Message Title</label><br>
+                                <input type="text" id="message_title" name="title" class="hw2-tab"
+                                    placeholder="Hello World" style="width: 100%; box-sizing: border-box;">
+                            </div>
+
+                            <div>
+                                <label for="message_body">Message Body</label><br>
+                                <textarea id="message_body" name="body" class="hw2-tab" rows="4"
+                                    placeholder="Type your content here..."
+                                    style="width: 100%; box-sizing: border-box;"></textarea>
+                            </div>
+
+                            <button type="submit" class="hw2-tab is-active"
+                                style="text-align: center; margin-top: 10px;">Send Request</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </main>
+
+        <aside class="sidebar">
+            <h3>Status</h3>
+            <p><strong>JavaScript:</strong> <span id="js-status" style="color: #ff8888;">OFF</span></p>
+            <p style="font-size: 0.9em; opacity: 0.8;">
+                If JS is OFF, the form defaults to <code>POST</code> and targeting the Python endpoint using standard
+                URL encoding.
+            </p>
+        </aside>
+
+    </div>
+
+    <script>
+        // Update Sidebar status to show JS is running
+        document.getElementById('js-status').textContent = "ON";
+        document.getElementById('js-status').style.color = "#8ab4f8";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('echoForm');
+            const endpointSelect = document.getElementById('endpoint');
+            const methodSelect = document.getElementById('method');
+            const encodingSelect = document.getElementById('encoding');
+
+            form.addEventListener('submit', async (e) => {
+                // Prevent default HTML submission to handle JSON/PUT/DELETE via JS
+                e.preventDefault();
+
+                const endpoint = endpointSelect.value;
+                const method = methodSelect.value;
+                const encoding = encodingSelect.value;
+
+                // Harvest form data
+                const formData = new FormData(form);
+                const dataObj = Object.fromEntries(formData.entries());
+
+                // Remove control fields from the payload we send to the server
+                delete dataObj.endpoint;
+                delete dataObj.method;
+                delete dataObj.encoding;
+
+                let body = null;
+                let url = endpoint;
+
+                const options = {
+                    method: method,
+                    headers: {
+                        'Accept': 'text/html' // We want the HTML page back
+                    }
+                };
+
+                // --- Logic for GET/DELETE (Query Params) ---
+                if (method === 'GET' || method === 'DELETE') {
+                    const params = new URLSearchParams(dataObj).toString();
+                    if (params) {
+                        url += `?${params}`;
+                    }
+                }
+                // --- Logic for POST/PUT (Body) ---
+                else {
+                    if (encoding === 'application/json') {
+                        options.headers['Content-Type'] = 'application/json';
+                        body = JSON.stringify(dataObj);
+                    } else {
+                        options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                        body = new URLSearchParams(dataObj).toString();
+                    }
+                    options.body = body;
+                }
+
+                try {
+                    // Perform the fetch
+                    const res = await fetch(url, options);
+
+                    if (!res.ok) throw new Error(`Server returned ${res.status} ${res.statusText}`);
+
+                    // Get the HTML text response
+                    const html = await res.text();
+
+                    // Overwrite the current page with the response (Simulates a navigation)
+                    document.open();
+                    document.write(html);
+                    document.close();
+
+                    // Update URL in browser bar (optional, makes it look real)
+                    window.history.pushState({}, '', url);
+
+                } catch (err) {
+                    alert("Request Failed: " + err.message);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
