@@ -13,7 +13,6 @@ fn main() {
     <h1 align="center">Environment Variables (Rust)</h1>
     <pre>"#);
 
-    // Sort vars
     let mut vars: Vec<(String, String)> = env::vars().collect();
     vars.sort_by(|a, b| a.0.cmp(&b.0));
 

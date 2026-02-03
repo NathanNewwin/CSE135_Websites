@@ -1,9 +1,6 @@
 <?php
-// 1. Get Data
 $date = date('Y-m-d H:i:s');
 $remote_addr = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
-
-// 2. Set Headers
 header('Content-Type: text/html');
 ?>
 <!DOCTYPE html>

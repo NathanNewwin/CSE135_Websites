@@ -6,7 +6,6 @@ import html
 import urllib.parse
 from datetime import datetime
 
-# --- 1. Gather Request Details ---
 method = os.environ.get('REQUEST_METHOD', 'GET')
 content_type = os.environ.get('CONTENT_TYPE', '')
 content_length = os.environ.get('CONTENT_LENGTH', 0)
@@ -15,7 +14,6 @@ remote_addr = os.environ.get('REMOTE_ADDR', 'Unknown')
 user_agent = os.environ.get('HTTP_USER_AGENT', 'Unknown')
 server_name = os.environ.get('SERVER_NAME', 'localhost')
 
-# --- 2. Parse Data ---
 payload_data = {}
 
 def parse_query(qs):
@@ -48,7 +46,6 @@ else:
         else:
             payload_data = parse_query(body_str)
 
-# --- 3. Construct HTML ---
 print("Content-Type: text/html\n")
 
 print(f"""<!DOCTYPE html>
