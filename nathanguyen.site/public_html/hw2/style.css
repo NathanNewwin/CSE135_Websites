@@ -18,24 +18,20 @@ a:hover {
 }
 
 .page {
-    max-width: 1200px;
-    margin: 24px auto;
+    max-width: 700px;
+    margin: 40px auto;
     padding: 0 16px;
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 32px;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .course-header,
-.sidebar,
-.card,
-.left-col .card {
+.card {
     border-radius: 15px;
     border: 2px solid #b39eb5;
-    padding: 20px;
+    padding: 24px;
     background-color: #1e1e2e;
-    margin-bottom: 24px;
 }
 
 .course-title {
@@ -52,7 +48,7 @@ a:hover {
 
 h2,
 h3 {
-    margin: 0 0 12px 0;
+    margin: 0 0 16px 0;
     font-size: 1.2rem;
     padding-bottom: 8px;
     border-bottom: 2px solid #eeeeee;
@@ -60,25 +56,24 @@ h3 {
 
 label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-size: 0.9rem;
     color: #c3b1e1;
 }
 
 input,
 select,
-textarea,
-.hw2-tab {
+textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 16px;
+    padding: 12px;
+    margin-bottom: 20px;
     border-radius: 8px;
     border: 1px solid #5a5a7a;
     background-color: #2b2b3b;
     color: #ffffff;
     font-family: inherit;
-    box-sizing: border-box;
     font-size: 0.9rem;
+    box-sizing: border-box;
 }
 
 input:focus,
@@ -94,22 +89,22 @@ option {
     color: #ffffff;
 }
 
-/* Buttons */
 button.hw2-tab {
+    width: 100%;
+    padding: 12px;
     cursor: pointer;
     background-color: #373754;
     border: 1px solid #b39eb5;
+    color: #fff;
+    font-family: inherit;
     font-weight: bold;
-    transition: background 0.2s, transform 0.1s;
-    margin-top: 8px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
 button.hw2-tab:hover {
     background-color: #4b4b6a;
-}
-
-button.hw2-tab:active {
-    transform: translateY(1px);
 }
 
 table {
@@ -119,7 +114,7 @@ table {
 
 td,
 th {
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 1px solid #333;
     text-align: left;
 }
@@ -132,13 +127,8 @@ th {
 td:first-child {
     color: #b39eb5;
     font-weight: 500;
-    width: 120px;
+    width: 140px;
     word-break: break-all;
-}
-
-.left-col {
-    display: flex;
-    flex-direction: column;
 }
 
 .active {

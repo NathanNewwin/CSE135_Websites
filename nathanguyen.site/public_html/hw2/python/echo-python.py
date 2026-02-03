@@ -6,6 +6,7 @@ import html
 import urllib.parse
 from datetime import datetime
 
+# --- 1. Gather Request Details ---
 method = os.environ.get('REQUEST_METHOD', 'GET')
 content_type = os.environ.get('CONTENT_TYPE', '')
 content_length = os.environ.get('CONTENT_LENGTH', 0)
@@ -14,6 +15,7 @@ remote_addr = os.environ.get('REMOTE_ADDR', 'Unknown')
 user_agent = os.environ.get('HTTP_USER_AGENT', 'Unknown')
 server_name = os.environ.get('SERVER_NAME', 'localhost')
 
+# --- 2. Parse Data ---
 payload_data = {}
 
 def parse_query(qs):
@@ -46,6 +48,7 @@ else:
         else:
             payload_data = parse_query(body_str)
 
+# --- 3. Construct HTML ---
 print("Content-Type: text/html\n")
 
 print(f"""<!DOCTYPE html>
@@ -59,15 +62,22 @@ print(f"""<!DOCTYPE html>
 <body>
 <div class="page">
     
-    <div class="left-col">
-        <header class="course-header">
-            <h1 class="course-title">Python Echo</h1>
-            <p class="course-subtitle">Backend Response</p>
-        </header>
+    <header class="course-header">
+        <h1 class="course-title">Python Echo</h1>
+        <p class="course-subtitle">Backend Response</p>
+    </header>
 
-        <div class="card active">
-            <h2>Received Body</h2>
-            <div style="padding-top: 10px;">
+    <div class="card active">
+        <h2>Server Details</h2>
+        <p><strong>Method:</strong> {html.escape(method)}</p>
+        <p><strong>Host:</strong> {html.escape(server_name)}</p>
+        <p><strong>IP:</strong> {html.escape(remote_addr)}</p>
+        <p><strong>Time:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+    </div>
+
+    <div class="card">
+        <h2>Received Body</h2>
+        <div style="padding-top: 5px;">
 """)
 
 if not payload_data:
@@ -82,27 +92,18 @@ else:
     print("</table>")
 
 print(f"""
-            </div>
-        </div>
-        
-        <div style="margin-top: 30px;">
-                <a href="../echo-form.html">&larr; Back to Form</a>
         </div>
     </div>
 
-    <div class="sidebar">
-        <h2>Server Details</h2>
-        <p><strong>Method:</strong> {html.escape(method)}</p>
-        <p><strong>Host:</strong> {html.escape(server_name)}</p>
-        <p><strong>IP:</strong> {html.escape(remote_addr)}</p>
-        <p><strong>Time:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-
-        <div style="border-top: 1px solid #eeeeee; margin: 20px 0;"></div>
-
+    <div class="card">
         <h3>User Agent</h3>
-        <p style="font-size: 0.8rem; line-height: 1.4; color: #8ab4f8; word-wrap: break-word;">
+        <p style="font-size: 0.85rem; line-height: 1.4; color: #8ab4f8; word-wrap: break-word;">
             {html.escape(user_agent)}
         </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 10px;">
+        <a href="../echo-form.html" style="font-size: 1.1rem; font-weight: bold;">&larr; Return to Form</a>
     </div>
 
 </div>

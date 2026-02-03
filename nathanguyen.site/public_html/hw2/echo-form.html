@@ -12,25 +12,12 @@
 
     <div class="page">
 
-        <div class="left-col">
-            <header class="course-header">
-                <h1 class="course-title">Echo Chamber</h1>
-                <p class="course-subtitle">Test HTTP Methods & Encodings</p>
-            </header>
+        <header class="course-header">
+            <h1 class="course-title">Echo Chamber</h1>
+            <p class="course-subtitle">Test HTTP Methods & Encodings</p>
+        </header>
 
-            <div style="flex-grow: 1; min-height: 200px;"></div>
-
-            <div class="card active">
-                <h2>Status</h2>
-                <p><strong>JavaScript:</strong> <span id="js-status" style="color: #ff8888;">OFF</span></p>
-                <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.5;">
-                    If JS is OFF, the form defaults to <code>POST</code> and targeting the Python endpoint using
-                    standard URL encoding.
-                </p>
-            </div>
-        </div>
-
-        <div class="sidebar">
+        <main class="card active">
             <h2>Request Config</h2>
 
             <form id="echoForm" action="python/echo-python.py" method="POST">
@@ -56,22 +43,32 @@
                     <option value="application/json">Application/JSON</option>
                 </select>
 
-                <div style="border-top: 1px solid #eeeeee; margin: 10px 0 15px;"></div>
+                <div style="border-top: 1px solid #333; margin: 10px 0 20px;"></div>
                 <h3>Payload Data</h3>
 
                 <label for="message_title">Message Title</label>
                 <input type="text" id="message_title" name="title" placeholder="Hello World">
 
                 <label for="message_body">Message Body</label>
-                <textarea id="message_body" name="body" rows="4" placeholder="Type your content here..."></textarea>
+                <textarea id="message_body" name="body" rows="5" placeholder="Type your content here..."></textarea>
 
                 <button type="submit" class="hw2-tab">Send Request</button>
             </form>
-        </div>
+        </main>
+
+        <aside class="card">
+            <h2>Status</h2>
+            <p><strong>JavaScript:</strong> <span id="js-status" style="color: #ff8888;">OFF</span></p>
+            <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.5;">
+                If JS is OFF, the form defaults to <code>POST</code> and targeting the Python endpoint using standard
+                URL encoding.
+            </p>
+        </aside>
 
     </div>
 
     <script>
+        // Update UI to show JS is active
         const jsStatus = document.getElementById('js-status');
         jsStatus.textContent = "ON";
         jsStatus.style.color = "#8ab4f8";
