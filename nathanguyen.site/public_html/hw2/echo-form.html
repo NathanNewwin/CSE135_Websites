@@ -72,10 +72,9 @@
     </div>
 
     <script>
-        // Update UI to show JS is active
         const jsStatus = document.getElementById('js-status');
         jsStatus.textContent = "ON";
-        jsStatus.style.color = "#8ab4f8"; // Light Blue
+        jsStatus.style.color = "#8ab4f8";
 
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('echoForm');
@@ -93,7 +92,6 @@
                 const formData = new FormData(form);
                 const dataObj = Object.fromEntries(formData.entries());
 
-                // Remove config fields from payload
                 delete dataObj.endpoint;
                 delete dataObj.method;
                 delete dataObj.encoding;

@@ -136,28 +136,28 @@ a:active {
   text-align: left;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(0,0,0,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.15);
   color: inherit;
   cursor: pointer;
 }
 
 .hw2-tab.is-active {
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.45);
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .hw2-panel {
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(0,0,0,0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.10);
   padding: 14px 16px;
 }
 
 .hw2-title {
   margin: 0 0 10px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255,255,255,0.20);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.20);
 }
 
 .hw2-pane {
@@ -171,7 +171,7 @@ a:active {
 .hw2-footer {
   margin-top: 16px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hw2-footer a {
