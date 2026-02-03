@@ -167,3 +167,14 @@ a:active {
 .hw2-pane.is-open {
   display: block;
 }
+
+.hw2-footer {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.hw2-footer a {
+  color: #c9b8ff;
+  font-weight: 500;
+}
