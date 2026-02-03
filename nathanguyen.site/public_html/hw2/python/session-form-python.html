@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Session Start</title>
+    <link rel="stylesheet" href="/hw2/style.css">
+</head>
+<body>
+<div class="page">
+    <header class="course-header">
+        <h1 class="course-title">State Management</h1>
+    </header>
+
+    <div class="card active">
+        <h2>Start Session</h2>
+        <p>Enter your name to store it in a server-side session.</p>
+        
+        <form action="state-1-python.py" method="POST">
+            <label for="username">Your Name</label>
+            <input type="text" id="username" name="username" placeholder="e.g. Nathan" required>
+            
+            <button type="submit" class="hw2-tab">Login & Save Session</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

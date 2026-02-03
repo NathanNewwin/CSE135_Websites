@@ -11,7 +11,7 @@ print(f"""<!DOCTYPE html>
 <html>
 <head>
   <title>Hello Python</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <h1 align=center>Hello, World!</h1>
