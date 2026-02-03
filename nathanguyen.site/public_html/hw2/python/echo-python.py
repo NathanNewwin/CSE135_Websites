@@ -60,7 +60,7 @@ print(f"""<!DOCTYPE html>
 </head>
 <body>
 
-<h1 style="text-align:right;">Python General Echo</h1>
+<h1 align=center;">Python General Echo</h1>
 <hr>
 
 <p><b>Server Protocol:</b> {server_protocol}</p>

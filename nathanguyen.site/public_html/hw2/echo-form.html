@@ -8,13 +8,18 @@
     <style>
         .echo-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 14px;
         }
 
         .echo-row {
-            display: grid;
+            display: flex;
+            flex-direction: column;
             gap: 6px;
+        }
+
+        .echo-row input {
+            width: 100%;
         }
 
         .echo-actions {
@@ -34,10 +39,9 @@
             min-height: 120px;
         }
 
-        @media (max-width: 900px) {
-            .echo-grid {
-                grid-template-columns: 1fr;
-            }
+        .echo-status {
+            margin-top: 12px;
+            opacity: 0.9;
         }
 
         input,
@@ -181,14 +185,13 @@
 
                     <div class="echo-actions" style="margin-top:12px;">
                         <button type="submit">Send</button>
-                        <span class="tbd">Response:</span>
                     </div>
+                    
+                    <div id="status" class="echo-status" aria-live="polite"></div>
                 </form>
 
-                <pre class="echo-out" id="out" aria-live="polite">{}</pre>
-
                 <p style="margin-top:10px;">
-                    <a href="/">back</a>
+                    <a href="/">Back</a>
                 </p>
             </section>
         </main>
@@ -197,7 +200,7 @@
     <script>
         (function () {
             const form = document.getElementById("echoForm");
-            const out = document.getElementById("out");
+            const status = document.getElementById("status");
             const lang = document.getElementById("lang");
             const method = document.getElementById("method");
             const encoding = document.getElementById("encoding");
@@ -209,12 +212,11 @@
             }
 
             function buildPayload() {
-                const data = {
+                return {
                     name: document.getElementById("name").value,
                     message: document.getElementById("message").value,
                     extra: document.getElementById("extra").value
                 };
-                return data;
             }
 
             syncEndpoint();
@@ -233,7 +235,6 @@
                 let options = { method: m, headers: {} };
 
                 if (m === "GET") {
-                    // put fields in query string
                     const params = new URLSearchParams(data);
                     fetchUrl = url + "?" + params.toString();
                 } else {
@@ -247,19 +248,11 @@
                 }
 
                 try {
-                    out.textContent = "Loading...";
-                    const resp = await fetch(fetchUrl, options);
-                    const text = await resp.text();
-
-                    // Pretty print JSON if possible
-                    try {
-                        const obj = JSON.parse(text);
-                        out.textContent = JSON.stringify(obj, null, 2);
-                    } catch {
-                        out.textContent = text;
-                    }
+                    status.textContent = "Sending...";
+                    await fetch(fetchUrl, options); // ✅ ignore response completely
+                    status.textContent = `Sent ${m} to ${fetchUrl}`;
                 } catch (err) {
-                    out.textContent = "Request failed: " + err;
+                    status.textContent = "Send failed: " + err;
                 }
             });
         })();
